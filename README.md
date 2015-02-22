@@ -17,6 +17,9 @@ The default behavior is for a command to throw an exception if it fails. See [de
 
 ## License: GPL v3
 ```
+    cppshell - facilities to simplify calling shell commands for C++
+    Copyright (C) 2015 Alfred Bratterud
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
