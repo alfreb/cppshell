@@ -9,7 +9,7 @@ cout << cmd{"ls -l"} << endl;
 Outputs whatever `ls -l` outputs. To get the results as a string:
 
 ```
-string user = cmd{"whoami"};
+string user = cmd{"whoami"}.str();
 cout << "Username: " << user << endl;
 ```
 
