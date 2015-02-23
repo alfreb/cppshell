@@ -9,10 +9,11 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-
-
 namespace cppshell{
-
+  
+  /** 
+      A simple class to start and read from a subprocess 
+   */
   class subprocess{
     enum{READ,WRITE};
     int link[2];
@@ -28,6 +29,13 @@ namespace cppshell{
     inline int pid(){ return pid_; }
     
   };
+  
+  /** 
+      Read from stdout of the process, until EOF. 
+      NOTE: If you want partial output, read from 
+            subprocess::stdout().
+   */
+  std::ostream& operator<<(std::ostream&,subprocess&);
 }
 
 #endif
