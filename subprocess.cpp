@@ -71,6 +71,10 @@ string subprocess::getline(){
 }
 
 
+void subprocess::kill(){
+  ::kill(pid_,SIGKILL);
+}
+
 ostream& cppshell::operator<<(ostream& str,subprocess& proc){
   char buf[4096]{0};
   while(read(proc.stdout(),buf,sizeof(buf)-1))

@@ -30,6 +30,9 @@ namespace cppshell{
     inline int pid(){ return pid_; }
 
     std::string getline();
+    
+    // i.e. Kill -9
+    void kill();
   };
   
   /** 
