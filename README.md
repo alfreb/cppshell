@@ -1,7 +1,7 @@
 # cppshell
-Run shell commands from C++
+Run shell commands from C++. Also a simple subprocess module for running commands asynchronously.
 
-## Basic usage (C++11 syntax)
+## `cmd` basic usage (C++11 syntax)
 
 ```
 cout << cmd{"ls -l"} << endl;
@@ -14,6 +14,19 @@ cout << "Username: " << user << endl;
 ```
 
 The default behavior is for a command to throw an exception if it fails. See [demo.cpp](./demo.cpp) for more examples.
+
+## `subprocess` basic usage (C++11 syntax)
+```
+cppshell::subprocess proc{"ls","-l"};
+```
+This call will return immediatly, having started the command in a separate thread. You can now read from it's stdout, by getting its file descriptor: `proc.stdout()` (no support for writing back to it yet - that just requires another pipe).  
+
+Reading "everything" from the subprocess:
+```
+    cout << proc << endl;
+```
+
+
 
 ## License: GPL v3
 ```

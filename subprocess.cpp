@@ -56,3 +56,12 @@ subprocess::subprocess(vector<std::string> args){
       });
   }
 }
+
+
+ostream& cppshell::operator<<(ostream& str,subprocess& proc){
+  char buf[4096]{0};
+  while(read(proc.stdout(),buf,sizeof(buf)-1))
+    str << buf;
+  return str;
+}
+

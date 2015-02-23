@@ -17,8 +17,11 @@
 
  **/
 
-#include "cppshell.hpp"
 #include <iostream>
+
+#include "cppshell.hpp"
+#include "subprocess.hpp"
+
 
 using namespace std;
 
@@ -53,4 +56,11 @@ int main(){
   }catch(cppshell::cmdException e){
     cout << "cmdException thrown: " << e.what() << endl << endl;
   }
+
+  // Running a subprocess
+  cppshell::subprocess proc{"ls","-l"};
+  cout << "The subprocess runs in a separate thread. output:" << endl;
+  
+  cout << proc << endl;
+  
 }
