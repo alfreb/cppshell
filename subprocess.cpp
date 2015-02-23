@@ -58,6 +58,19 @@ subprocess::subprocess(vector<std::string> args){
 }
 
 
+string subprocess::getline(){
+  string in{};
+  char c{};
+  int res{};
+  do{
+    res=read(stdout(),&c,1);
+    in += c;
+  }while(c!='\n' && res);
+  
+  return in;
+}
+
+
 ostream& cppshell::operator<<(ostream& str,subprocess& proc){
   char buf[4096]{0};
   while(read(proc.stdout(),buf,sizeof(buf)-1))

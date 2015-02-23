@@ -60,7 +60,9 @@ int main(){
   // Running a subprocess
   cppshell::subprocess proc{"ls","-l"};
   cout << "The subprocess runs in a separate thread. output:" << endl;
-  
+  for(int i=0;i<3; i++)
+    cout << "Line " << i << ": " << proc.getline();
+  cout << "The rest: " << endl;
   cout << proc << endl;
   
 }

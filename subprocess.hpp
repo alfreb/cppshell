@@ -21,13 +21,15 @@ namespace cppshell{
     std::string output;
     std::future<int> exit_status_;
   public:
-    
+    // Construct with a list of parameters, the program being the first
+    // @note: uses execvp and passes arg[0] as first and second arg)
     subprocess(std::vector<std::string> args);
     inline subprocess(std::initializer_list<std::string> args) 
       : subprocess(std::vector<std::string>(args)) {}
     inline int stdout(){return link[READ] ;}
     inline int pid(){ return pid_; }
-    
+
+    std::string getline();
   };
   
   /** 
