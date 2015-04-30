@@ -64,6 +64,8 @@ string subprocess::getline(){
   int res{};
   do{
     res=read(stdout(),&c,1);
+    if (res < 1)
+      throw SubprocessException("No output from process");
     in += c;
   }while(c!='\n' && res);
   

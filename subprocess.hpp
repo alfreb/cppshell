@@ -41,6 +41,13 @@ namespace cppshell{
             subprocess::stdout().
    */
   std::ostream& operator<<(std::ostream&,subprocess&);
+  
+  class SubprocessException : public std::runtime_error {
+    using runtime_error::runtime_error;
+  };
+  
 }
+
+
 
 #endif
