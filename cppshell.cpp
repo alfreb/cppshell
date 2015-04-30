@@ -40,7 +40,8 @@ cmd::cmd(string command, bool throws) : command_(command){
 }
 
 cmd::~cmd(){
-  //pclose(pipe_); // Closing allready in constructor
+  // Closing is allready done in the constructor
+  // pclose(pipe_); 
 }
 
 
@@ -53,10 +54,7 @@ ostream& cppshell::operator<<(ostream& str,cmd sh){
 };
 
 
-
-
 /** CMD EXCEPTION */
-
 cmdException::cmdException(string command, string output,int code)
   : runtime_error{"Command '"+command+"' returned error: "
     +to_string(code)+" "+output},
