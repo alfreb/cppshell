@@ -15,8 +15,8 @@ namespace cppshell{
       A simple class to start and read from a subprocess 
    */
   class subprocess{
-    enum{READ,WRITE};
-    int link[2];
+    enum{OUT_READ, OUT_WRITE, IN_READ, IN_WRITE};
+    int pipes[4];
     pid_t pid_;
     std::string output;
     std::future<int> exit_status_;
@@ -26,13 +26,20 @@ namespace cppshell{
     subprocess(std::vector<std::string> args);
     inline subprocess(std::initializer_list<std::string> args) 
       : subprocess(std::vector<std::string>(args)) {}
-    inline int stdout(){return link[READ] ;}
+    inline int stdout(){ return pipes[OUT_READ];}
+    inline int stdin(){ return pipes[IN_WRITE];}
     inline int pid(){ return pid_; }
 
     std::string getline();
+    std::string read(int n);
+    
+    void write(std::string);
     
     // i.e. Kill -9
     void kill();
+    
+    ~subprocess();
+
   };
   
   /** 

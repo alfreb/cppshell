@@ -64,5 +64,21 @@ int main(){
     cout << "Line " << i << ": " << proc.getline();
   cout << "The rest: " << endl;
   cout << proc << endl;
+
+  
+  cout << "Starting a two-way dialogue" << endl;
+  cppshell::subprocess proc2{"./two_way_test_program"};
+  for(int i=0;i<4; i++)
+    cout << "Line " << i << ": " << proc2.getline();
+
+  // Read "Now give me some data"  
+  cout << proc2.read(30) << endl;
+  
+  proc2.write("Hello\n");
+  cout << proc2.getline() << endl;
+  proc2.write("data\n");
+  cout << proc2.getline() << endl;
+  
+  
   
 }
