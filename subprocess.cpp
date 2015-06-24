@@ -103,7 +103,7 @@ void subprocess::kill(){
 subprocess::~subprocess(){
   close(pipes[OUT_READ]);
   close(pipes[OUT_WRITE]);
-  close(pipes[IN_WRITE]);
+  close(pipes[IN_READ]);
   close(pipes[IN_WRITE]);
   this->kill();
 }
@@ -112,7 +112,8 @@ subprocess::~subprocess(){
 
 ostream& cppshell::operator<<(ostream& str,subprocess& proc){
   char buf[4096]{0};
-  while(read(proc.stdout(),buf,sizeof(buf)-1))
+  
+  while(read(proc.stdout(),buf,4096))
     str << buf;
   return str;
 }
