@@ -1,6 +1,6 @@
 /**
     This file is part of cppshell.
-    Copyright (C) 2015 Alfred Bratterud
+    Copyright (C) 2016 Rico Antonio Felix
 
     cppshell is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,45 +14,36 @@
 
     You should have received a copy of the GNU General Public License
     along with cppshell.  If not, see <http://www.gnu.org/licenses/>.
- **/
+**/
 
-#ifndef CPPSHELL_HPP
-#define CPPSHELL_HPP
+#ifndef PIPE_HPP
+#define PIPE_HPP
 
+#include <array>
 #include <string>
 #include <stdexcept>
 
-#include "pipe.hpp"
-
 namespace cppshell {
-  
-class cmd {  
+
+class pipe {
 public:
-  cmd(const std::string& command, bool throws = true);
-  ~cmd() noexcept = default;
-  
-  bool ok() const noexcept;
-  const std::string& str() const noexcept;
+  explicit pipe(const std::string& command);
+  ~pipe() noexcept;
 
+  bool read();
+  std::string str() const;
+  int close();
 private:
-  std::string output_;
-  int         exit_code_;
-  pipe        pipe_;
+  FILE*                 pipe_;
+  std::array<char, 512> buffer_;
+  bool                  closed_;
+}; // class pipe
 
-  friend std::ostream& operator<<(std::ostream&, const cmd&);
-}; //< class cmd
-
-class cmd_exception : public std::runtime_error {
+class pipe_exception : public std::runtime_error {
 public:
-  cmd_exception(const std::string& command, const std::string& output, const int exit);
-  cmd_exception(const std::string& output, const int exit);
-  
-  int exit_code() const noexcept;
-
-private:
-  const int exit_code_;
-}; //< class cmd_exception
+  explicit pipe_exception(const std::string& what);
+}; // class pipe_exception
 
 } //< namespace cppshell
-  
-#endif //< CPPSHELL_HPP
+
+#endif //< PIPE_HPP

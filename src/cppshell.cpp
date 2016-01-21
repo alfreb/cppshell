@@ -26,7 +26,6 @@ namespace cppshell {
 using namespace std;
 
 cmd::cmd(const std::string& command, bool throws) try:
-  command_{command},
   output_{},
   exit_code_{},
   pipe_{command}
@@ -34,9 +33,9 @@ cmd::cmd(const std::string& command, bool throws) try:
   while(pipe_.read()) output_ += pipe_.str();
   auto status = pipe_.close();
   exit_code_ = WEXITSTATUS(status);
-  if(exit_code_ != 0 && throws) throw cmd_exception(command_, output_, exit_code_);
+  if(exit_code_ != 0 && throws) throw cmd_exception(command, output_, exit_code_);
 } catch(const pipe_exception& e) {
-  if (throws) throw;
+  if (throws) throw cmd_exception(command, output_, exit_code_);
   std::cerr << e.what() << '\n';
 }
 
