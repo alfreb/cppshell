@@ -14,56 +14,56 @@
 
     You should have received a copy of the GNU General Public License
     along with cppshell.  If not, see <http://www.gnu.org/licenses/>.
-
  **/
 
 #include <iostream>
 #include <unistd.h>
+
 #include "cppshell.hpp"
 
+namespace cppshell {
 
 using namespace std;
-using namespace cppshell;
 
-cmd::cmd(string command, bool throws) : command_(command){
-  char line[500];
-  if ( !(pipe_ = (FILE*)popen(command.c_str(),"r")) )
-    throw cmdException("Couldn't open pipe.",(long)pipe_);
-  
-  while( fgets(line, sizeof line, pipe_))
-    output_.append(line);   
-  
-  int status = pclose(pipe_);
+cmd::cmd(const std::string& command, bool throws) try:
+  command_{command},
+  output_{},
+  exit_code_{},
+  pipe_{command}
+{
+  while(pipe_.read()) output_ += pipe_.str();
+  auto status = pipe_.close();
   exit_code_ = WEXITSTATUS(status);
-  if(exit_code_ != 0 && throws)
-    throw cmdException(command_, output_, exit_code_);
+  if(exit_code_ != 0 && throws) throw cmd_exception(command_, output_, exit_code_);
+} catch(const pipe_exception& e) {
+  if (throws) throw;
+  std::cerr << e.what() << '\n';
 }
 
-cmd::~cmd(){
-  // Closing is allready done in the constructor
-  // pclose(pipe_); 
+const string& cmd::str() const noexcept {
+  return output_;
 }
 
+bool cmd::ok() const noexcept { 
+  return !exit_code_;
+}
 
-string cmd::str(){ return output_; }
-
-bool cmd::ok(){ return exit_code_ == 0; }
-
-ostream& cppshell::operator<<(ostream& str,cmd sh){
+ostream& operator<<(ostream& str, const cmd& sh) {
   return str << sh.output_;
 };
 
-
-/** CMD EXCEPTION */
-cmdException::cmdException(string command, string output,int code)
-  : runtime_error{"Command '"+command+"' returned error: "
-    +to_string(code)+" "+output},
-                exit_code_(code)
+cmd_exception::cmd_exception(const string& command, const string& output, int code) :
+  runtime_error{"Command '" + command + "' returned error: " + to_string(code) + " " + output},
+  exit_code_   {code}
 {}
 
-cmdException::cmdException(string what,int code)
-  : runtime_error{what},exit_code_(code)
+cmd_exception::cmd_exception(const string& what, int code) :
+  runtime_error{what},
+  exit_code_   {code}
 {}
 
+int cmd_exception::exit_code() const noexcept {
+  return exit_code_;
+}
 
-int cmdException::exit_code(){ return exit_code_; }
+} //< namespace cppshell

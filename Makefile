@@ -1,22 +1,17 @@
-
-GPP=g++-4.9 -std=c++14
-
-OBJ = cppshell.o subprocess.o 
-PROG = two_way_test_program
-
+GPP=g++-4.9 -std=c++14 -O3 -Wall -Wextra
+INC=-I../inc/
+SRC = ../src/cppshell.cpp ../src/pipe.cpp ../src/subprocess.cpp
 
 # NOTE: subprocess need pthread
 LIB=-pthread
 
-all: $(OBJ) $(PROG)
-	$(GPP) $(OBJ) $(LIB) demo.cpp -o demo
+all: demo dep
 
+demo: demo.cpp
+	${GPP} ${INC} -odemo demo.cpp ${SRC} ${LIB}
 
-%.o: %.cpp %.hpp
-	$(GPP) -c  $< -o $@
-
-%:%.cpp
-	$(GPP) $< -o $@
+dep: two_way_test_program.cpp
+	${GPP} -otwo_way_test_program two_way_test_program.cpp
 
 clean:
-	$(RM)  $(OBJ)  $(PROG) demo
+	rm -f demo two_way_test_program

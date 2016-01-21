@@ -14,7 +14,6 @@
 
     You should have received a copy of the GNU General Public License
     along with cppshell.  If not, see <http://www.gnu.org/licenses/>.
-
  **/
 
 #ifndef CPPSHELL_HPP
@@ -23,36 +22,38 @@
 #include <string>
 #include <stdexcept>
 
+#include "pipe.hpp"
+
 namespace cppshell {
   
-  class cmd{  
-    int exit_code_;
-    std::string command_;
-    std::string output_;
-    FILE* pipe_{nullptr};
-    
-  public:
-    cmd(std::string command, bool throws = true);
-    ~cmd();
-    
-    bool ok();
-    std::string str();
-    friend std::ostream& operator<<(std::ostream&,cmd);
-    
-  };
+class cmd {  
+public:
+  cmd(const std::string& command, bool throws = true);
+  ~cmd() noexcept = default;
   
-  std::ostream& operator<<(std::ostream&,cmd);
-  
-  class cmdException : public std::runtime_error {
-    int exit_code_;
-  public:
-    cmdException(std::string command, std::string output, int exit);
-    cmdException(std::string output, int exit);
-    
-    int exit_code();
-  };
-}
-  
-#endif
+  bool ok() const noexcept;
+  const std::string& str() const noexcept;
 
+private:
+  std::string command_;
+  std::string output_;
+  int         exit_code_;
+  pipe        pipe_;
 
+  friend std::ostream& operator<<(std::ostream&, const cmd&);
+}; //< class cmd
+
+class cmd_exception : public std::runtime_error {
+public:
+  cmd_exception(const std::string& command, const std::string& output, int exit);
+  cmd_exception(const std::string& output, int exit);
+  
+  int exit_code() const noexcept;
+
+private:
+  int exit_code_;
+}; //< class cmd_exception
+
+} //< namespace cppshell
+  
+#endif //< CPPSHELL_HPP
