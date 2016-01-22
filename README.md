@@ -13,11 +13,11 @@ string user = cmd{"whoami"}.str();
 cout << "Username: " << user << endl;
 ```
 
-The default behavior is for a command to throw an exception if it fails. See [demo.cpp](./demo.cpp) for more examples.
+The default behavior is for a command to throw an exception if it fails. See [demo.cpp](example/demo.cpp) for more examples.
 
 ## `subprocess` basic usage (C++11 syntax)
 ```
-cppshell::subprocess proc{"ls","-l"};
+subprocess proc {"ls","-l"};
 ```
 This call will return immediatly, having started the command in a separate thread. You can now read from it's stdout, by getting its file descriptor: `proc.stdout()` (no support for writing back to it yet - that just requires another pipe).  
 
@@ -25,8 +25,6 @@ Reading "everything" from the subprocess:
 ```
     cout << proc << endl;
 ```
-
-
 
 ## License: GPL v3
 ```

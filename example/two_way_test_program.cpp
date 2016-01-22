@@ -14,45 +14,26 @@
 
     You should have received a copy of the GNU General Public License
     along with cppshell.  If not, see <http://www.gnu.org/licenses/>.
-
  **/
 
-#ifndef CPPSHELL_HPP
-#define CPPSHELL_HPP
+#include <iostream>
 
-#include <string>
-#include <stdexcept>
+using namespace std;
 
-namespace cppshell {
+int main() {
+  cout << "Two way test " << endl;
+  cout << "Line 1 to ignore" << endl;
+  cout << "Line 2 to ignore" << endl;
+  cout << "Line 3 to ignore" << endl;
+
+  string s;
   
-  class cmd{  
-    int exit_code_;
-    std::string command_;
-    std::string output_;
-    FILE* pipe_{nullptr};
-    
-  public:
-    cmd(std::string command, bool throws = true);
-    ~cmd();
-    
-    bool ok();
-    std::string str();
-    friend std::ostream& operator<<(std::ostream&,cmd);
-    
-  };
+  do {
+    cout << "Now please give me some data: ";
+    if (!cin) break;
+    cin >> s;
+    cout << (s != "data" ? "UNKNOWN" : "OK") << endl;
+  } while (s != "data");
   
-  std::ostream& operator<<(std::ostream&,cmd);
-  
-  class cmdException : public std::runtime_error {
-    int exit_code_;
-  public:
-    cmdException(std::string command, std::string output, int exit);
-    cmdException(std::string output, int exit);
-    
-    int exit_code();
-  };
+  cout << "Exit" << endl;
 }
-  
-#endif
-
-
