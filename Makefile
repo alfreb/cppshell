@@ -1,5 +1,5 @@
 
-GPP=g++-4.9 -std=c++14
+GPP=g++ -std=c++14
 
 OBJ = cppshell.o subprocess.o 
 PROG = two_way_test_program
